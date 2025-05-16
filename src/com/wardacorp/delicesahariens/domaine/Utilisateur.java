@@ -1,3 +1,5 @@
+package com.wardacorp.delicesahariens.domaine;
+
 public class Utilisateur {
     // 1. Propriétés
     private String nom;
@@ -57,10 +59,16 @@ public class Utilisateur {
     }
 
     // 4. toString
+
     @Override
     public String toString() {
-        return "Utilisateur [nom=" + nom + ", prenom=" + prenom + ", email=" + email +
-                ", telephone=" + telephone + "]";
+        return "Utilisateur{" +
+                "nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
 

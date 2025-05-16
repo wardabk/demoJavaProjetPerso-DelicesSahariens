@@ -1,3 +1,5 @@
+package com.wardacorp.delicesahariens.domaine;
+
 public class Paiement {
     // 1. Propriétés
     private int id;
@@ -53,18 +55,18 @@ public class Paiement {
     // 4. Méthodes
     public void validerPaiement() {
         this.statutPaiement = "Validé";
-        System.out.println("Paiement validé.");
+        System.out.println("com.wardacorp.delicesahariens.domaine.Paiement validé.");
     }
 
     public void annulerPaiement() {
         this.statutPaiement = "Refusé";
-        System.out.println("Paiement annulé.");
+        System.out.println("com.wardacorp.delicesahariens.domaine.Paiement annulé.");
     }
 
     // 5. toString
     @Override
     public String toString() {
-        return "Paiement{" +
+        return "com.wardacorp.delicesahariens.domaine.Paiement{" +
                 "id=" + id +
                 ", montantPaye=" + montantPaye +
                 ", modePaiement='" + modePaiement + '\'' +

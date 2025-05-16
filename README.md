@@ -21,9 +21,9 @@ Avant de commencer, assurez-vous que vous avez installé les éléments suivants
 ## 👥 Acteurs et fonctionnalités
 | Acteur             | Fonctionnalités                                                                                                    |
 |--------------------|--------------------------------------------------------------------------------------------------------------------|
-| **Visiteur**       | Consulter les produits et s'inscrire pour devenir client.                                                          |
-| **Client**         | S'authentifier, créer un panier, passer une commande, suivre les commandes.                                        |
-| **Administrateur** | Gérer les produits (ajouter, modifier, supprimer), gérer les commandes des clients et visualiser des statistiques. |
+| **com.wardacorp.delicesahariens.domaine.Visiteur**       | Consulter les produits et s'inscrire pour devenir client.                                                          |
+| **com.wardacorp.delicesahariens.domaine.Client**         | S'authentifier, créer un panier, passer une commande, suivre les commandes.                                        |
+| **com.wardacorp.delicesahariens.domaine.Administrateur** | Gérer les produits (ajouter, modifier, supprimer), gérer les commandes des clients et visualiser des statistiques. |
 ## 📚 Auteur
 **Warda Boubaker** — Apprenante Java Fullstack, Objis (2024–2025)  
 LinkedIn: [www.linkedin.com/in/warda-boubaker](https://www.linkedin.com/in/warda-boubaker)  

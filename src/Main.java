@@ -1,31 +1,61 @@
-import java.util.List;
+import com.wardacorp.delicesahariens.domaine.Produit;
+import com.wardacorp.delicesahariens.service.LignePanier;
+import com.wardacorp.delicesahariens.domaine.Panier;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.wardacorp.delicesahariens.service.TestJDBC;
 
 public class Main {
     public static void main(String[] args) {
-        // Création d'un visiteur
-        Visiteur visiteur = new Visiteur("Ahmed", "Brahim", "ahmed@email.com", "123456789", "password123");
 
-        // Recherche de produits par le visiteur
-        List<Produit> produitsTrouves = visiteur.rechercherProduit("datte");
-        System.out.println("* Produits trouvés : ");
-        for (Produit produit : produitsTrouves) {
-            System.out.println(produit.getNom() + " - " + produit.getPrix() + "DT");
+        Connection conn = TestJDBC.getConnection();
+        if (conn != null) {
+            System.out.println("Connexion réussie");
+        } else {
+            System.out.println("Échec de connexion");
         }
 
-        // Création d'un client
-        Client client = new Client("Ali", "Ben Salah", "ali@email.com", "12345678", "password123");
+        Produit produit1 = new Produit(1, "Dattes Deglet Nour", "Description", "image.jpg", 15.0, 1000);
+        LignePanier ligne1 = new LignePanier(produit1, 3);
 
-        System.out.println("* Informations du client: ");
-        System.out.println(client.toString());
+        Panier panier = new Panier();
 
-        // Ajout de produits au panier
-        client.ajouterAuPanier(produitsTrouves.get(0), 2);
-        System.out.println("\n* Panier du client :");
-        client.getPanier().afficherPanier();
-
-        // Passage de commande
-        client.passerCommande();
+        panier.getLignes().add(ligne1);
 
 
+        panier.calculerSomme();
+
+        for (LignePanier lp : panier.getLignes()) {
+            System.out.println("Produit: " + lp.getProduit().getNom()
+                    + ", Quantité: " + lp.getQuantite()
+                    + ", Prix unitaire: " + lp.getProduit().getPrix());
+        }
+        System.out.println("Montant total du panier : " + panier.getSomme() + " DT");
+
+
+        try {
+            String sql = "INSERT INTO produit (id_produit, nom, description, image_url, prix, stock) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, produit1.getIdProduit());
+            stmt.setString(2, produit1.getNom());
+            stmt.setString(3, produit1.getDescription());
+            stmt.setString(4, produit1.getImage());
+            stmt.setDouble(5, produit1.getPrix());
+            stmt.setInt(6, produit1.getStock());
+
+            int rowsInserted = stmt.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Produit inséré avec succès !");
+            }
+
+            stmt.close();
+            conn.close(); // bonne pratique : fermer la connexion
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+
 }

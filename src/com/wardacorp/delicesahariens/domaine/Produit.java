@@ -1,16 +1,18 @@
+package com.wardacorp.delicesahariens.domaine;
+
 public class Produit {
-    // 1. Propriétés
-    private int id;
+    // 1. Proprietors
+    private int idProduit;
     private String nom;
     private String description;
     private String image;
     private double prix;
     private int stock;
 
-    // 2. Constructeur
-    public Produit(int id, String nom, String description,
+    // 2. Constructor
+    public Produit(int idProduit, String nom, String description,
                    String image, double prix, int stock) {
-        this.id = id;
+        this.idProduit = idProduit;
         this.nom = nom;
         this.description = description;
         this.image = image;
@@ -19,12 +21,13 @@ public class Produit {
     }
 
     // 3. Getters et Setters
-    public int getId() {
-        return id;
+
+    public int getIdProduit() {
+        return idProduit;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdProduit(int idProduit) {
+        this.idProduit = idProduit;
     }
 
     public String getNom() {
@@ -67,10 +70,19 @@ public class Produit {
         this.stock = stock;
     }
 
+
     // 4. toString
+
+
     @Override
     public String toString() {
-        return "Produit [id=" + id + ", nom=" + nom + ", description=" + description +
-                ", image=" + image + ", prix=" + prix + ", stock=" + stock + "]";
+        return "Produit{" +
+                "idProduit=" + idProduit +
+                ", nom='" + nom + '\'' +
+                ", description='" + description + '\'' +
+                ", image='" + image + '\'' +
+                ", prix=" + prix +
+                ", stock=" + stock +
+                '}';
     }
 }

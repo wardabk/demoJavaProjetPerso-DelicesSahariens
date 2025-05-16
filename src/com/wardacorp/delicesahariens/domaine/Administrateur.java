@@ -1,3 +1,5 @@
+package com.wardacorp.delicesahariens.domaine;
+
 import java.util.*;
 
 public class Administrateur extends Utilisateur {
@@ -15,7 +17,7 @@ public class Administrateur extends Utilisateur {
     // Modifier un produit
     public void modifierProduit(List<Produit> listeProduits, int idProduit, String nouveauNom, double nouveauPrix) {
         for (Produit produit : listeProduits) {
-            if (produit.getId() == idProduit) {
+            if (produit.getIdProduit() == idProduit) {
                 produit.setNom(nouveauNom);
                 produit.setPrix(nouveauPrix);
                 System.out.println("Produit modifié : " + produit.getNom());
@@ -28,7 +30,7 @@ public class Administrateur extends Utilisateur {
     // Supprimer un produit
     public void supprimerProduit(List<Produit> listeProduits, int idProduit) {
         for (Produit produit : listeProduits) {
-            if (produit.getId() == idProduit) {
+            if (produit.getIdProduit() == idProduit) {
                 listeProduits.remove(produit);
                 System.out.println("Produit supprimé : " + produit.getNom());
                 return;
