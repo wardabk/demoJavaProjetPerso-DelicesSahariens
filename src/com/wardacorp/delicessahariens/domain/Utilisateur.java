@@ -1,23 +1,30 @@
-package com.wardacorp.delicesahariens.domaine;
+package com.wardacorp.delicessahariens.domain;
 
-public class Utilisateur {
-    // 1. Propriétés
+public abstract class Utilisateur {
+    private  int id;
     private String nom;
     private String prenom;
+    private String numTel;
     private String email;
-    private String telephone;
     private String password;
 
-    // 2. Constructeur
-    public Utilisateur(String nom, String prenom, String email, String telephone, String password) {
+    public Utilisateur(int id, String nom, String prenom, String numTel, String email, String password) {
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
+        this.numTel = numTel;
         this.email = email;
-        this.telephone = telephone;
         this.password = password;
     }
 
-    // 3. Getters et Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getNom() {
         return nom;
     }
@@ -34,20 +41,20 @@ public class Utilisateur {
         this.prenom = prenom;
     }
 
+    public String getNumTel() {
+        return numTel;
+    }
+
+    public void setNumTel(String numTel) {
+        this.numTel = numTel;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
     }
 
     public String getPassword() {
@@ -58,17 +65,15 @@ public class Utilisateur {
         this.password = password;
     }
 
-    // 4. toString
-
     @Override
     public String toString() {
         return "Utilisateur{" +
-                "nom='" + nom + '\'' +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
+                ", numTel='" + numTel + '\'' +
                 ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 }
-

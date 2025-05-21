@@ -1,61 +1,68 @@
-import com.wardacorp.delicesahariens.domaine.Produit;
-import com.wardacorp.delicesahariens.service.LignePanier;
-import com.wardacorp.delicesahariens.domaine.Panier;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.wardacorp.delicessahariens.dao.ServiceProduitDAO;
+import com.wardacorp.delicessahariens.domain.Produit;
+import com.wardacorp.delicessahariens.presentation.ProduitGUI;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
-import com.wardacorp.delicesahariens.service.TestJDBC;
+import java.util.List;
 
 public class Main {
+
+    private static final Logger logger = Logger.getLogger(Main.class);
+
     public static void main(String[] args) {
-
-        Connection conn = TestJDBC.getConnection();
-        if (conn != null) {
-            System.out.println("Connexion réussie");
-        } else {
-            System.out.println("Échec de connexion");
-        }
-
-        Produit produit1 = new Produit(1, "Dattes Deglet Nour", "Description", "image.jpg", 15.0, 1000);
-        LignePanier ligne1 = new LignePanier(produit1, 3);
-
-        Panier panier = new Panier();
-
-        panier.getLignes().add(ligne1);
-
-
-        panier.calculerSomme();
-
-        for (LignePanier lp : panier.getLignes()) {
-            System.out.println("Produit: " + lp.getProduit().getNom()
-                    + ", Quantité: " + lp.getQuantite()
-                    + ", Prix unitaire: " + lp.getProduit().getPrix());
-        }
-        System.out.println("Montant total du panier : " + panier.getSomme() + " DT");
-
-
         try {
-            String sql = "INSERT INTO produit (id_produit, nom, description, image_url, prix, stock) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, produit1.getIdProduit());
-            stmt.setString(2, produit1.getNom());
-            stmt.setString(3, produit1.getDescription());
-            stmt.setString(4, produit1.getImage());
-            stmt.setDouble(5, produit1.getPrix());
-            stmt.setInt(6, produit1.getStock());
+            // Initialiser de Log4j
+            PropertyConfigurator.configure("./config/log4j.properties");
 
-            int rowsInserted = stmt.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("Produit inséré avec succès !");
+            // Créer d'un produit
+            Produit produit1 = new Produit(
+                    1,
+                    "Dattes Deglet Nour",
+                    "Délicieuses dattes tunisiennes",
+                    15,
+                    "images/dagla.jpg",
+                    100
+            );
+            Produit produit2 = new Produit(
+                    2,
+                    "Sirop de dattes",
+                    "Sirop naturel extrait de dattes",
+                    10,
+                    "sirop de dattes.jpg",
+                    50
+            );
+
+            Produit produit3 = new Produit(
+                    3,
+                    "Dattes farcies",
+                    "Dattes farcies aux amandes et noix",
+                    20,
+                    "dattes farcie3.jpg",
+                    75
+            );
+
+            // Ajouter un produit à la base de données
+            ServiceProduitDAO.addProduit(produit1);
+            ServiceProduitDAO.addProduit(produit2);
+            ServiceProduitDAO.addProduit(produit3);
+            logger.info("Produit ajouté avec succès !");
+
+            // afficher la liste de produits
+            List<Produit> produits = ServiceProduitDAO.getAllProduits();
+            logger.info("Liste des produits en base :");
+            for (Produit p : produits) {
+                System.out.println(p.getIdProduit() + " - " + p.getNom() + " - " + p.getPrix() + " DT");
             }
 
-            stmt.close();
-            conn.close(); // bonne pratique : fermer la connexion
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            logger.error("Erreur lors de l'exécution du programme :", e);
             e.printStackTrace();
         }
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            ProduitGUI gui = new ProduitGUI();
+            gui.setVisible(true);
+        });
     }
-
-
 }
