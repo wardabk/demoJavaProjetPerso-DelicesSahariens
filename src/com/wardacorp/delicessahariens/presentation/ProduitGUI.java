@@ -6,100 +6,52 @@ import com.wardacorp.delicessahariens.domain.Produit;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 public class ProduitGUI extends JFrame {
-    private JTextField nomField, descriptionField, prixField, stockField, imageField;
-    private JTextArea produitsArea;
+    private ServiceProduitDAO produitDAO = new ServiceProduitDAO();
+    private JTable table;
+    private DefaultTableModel tableModel;
 
     public ProduitGUI() {
         setTitle("Gestion des Produits - Délices Sahariens");
-        setSize(600, 500);
+        setSize(800, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Formulaire
-        JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 5));
-        formPanel.setBorder(BorderFactory.createTitledBorder("Ajouter un produit"));
+    // Définition de la table
+        String[] columnNames = {"id_produit", "Nom", "Description", "Prix", "Image_url", "Stock"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
 
-        nomField = new JTextField();
-        descriptionField = new JTextField();
-        prixField = new JTextField();
-        stockField = new JTextField();
-        imageField = new JTextField();
+        // Button d'affichage
+        JButton afficherBtn = new JButton("Afficher les Produits");
+        afficherBtn.addActionListener((ActionEvent e) -> {
+            try {
+                List<Produit> produits = produitDAO.getAllProduits();
+                tableModel.setRowCount(0); // Nettoie la table avant d'ajouter
+                for (Produit p : produits) {
+                    Object[] row = {
+                            p.getIdProduit(),
+                            p.getNom(),
+                            p.getDescription(),
+                            p.getPrix(),
+                            p.getImage(),
+                            p.getStock()
+                    };
+                    tableModel.addRow(row);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Erreur : " + ex.getMessage());
+            }
+        });
 
-        formPanel.add(new JLabel("Nom :"));
-        formPanel.add(nomField);
-        formPanel.add(new JLabel("Description :"));
-        formPanel.add(descriptionField);
-        formPanel.add(new JLabel("Prix :"));
-        formPanel.add(prixField);
-        formPanel.add(new JLabel("Stock :"));
-        formPanel.add(stockField);
-        formPanel.add(new JLabel("Image (chemin relatif) :"));
-        formPanel.add(imageField);
-
-        JButton ajouterBtn = new JButton("Ajouter Produit");
-        JButton afficherBtn = new JButton("Afficher Produits");
-        formPanel.add(ajouterBtn);
-        formPanel.add(afficherBtn);
-
-        // Zone d'affichage
-        produitsArea = new JTextArea();
-        produitsArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(produitsArea);
-
-        // Layout global
+        // Layout
         setLayout(new BorderLayout());
-        add(formPanel, BorderLayout.NORTH);
+        add(afficherBtn, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
-
-        // Action : Ajouter produit
-        ajouterBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Produit p = new Produit(
-                            0,
-                            nomField.getText(),
-                            descriptionField.getText(),
-                            Double.parseDouble(prixField.getText()),
-                            imageField.getText(),
-                            Float.parseFloat(stockField.getText())
-                    );
-                    ServiceProduitDAO.addProduit(p);
-                    JOptionPane.showMessageDialog(null, "Produit ajouté !");
-                    clearFields();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
-                }
-            }
-        });
-
-        // Action : Afficher produits
-        afficherBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    List<Produit> produits = ServiceProduitDAO.getAllProduits();
-                    produitsArea.setText(""); // reset
-                    for (Produit p : produits) {
-                        produitsArea.append(p.getIdProduit() + " - " + p.getNom() + " - " + p.getPrix() + " DT\n");
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
-                }
-            }
-        });
     }
-
-    private void clearFields() {
-        nomField.setText("");
-        descriptionField.setText("");
-        prixField.setText("");
-        stockField.setText("");
-        imageField.setText("");
-    }
-
 }

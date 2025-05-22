@@ -3,19 +3,30 @@ import com.wardacorp.delicessahariens.domain.Produit;
 import com.wardacorp.delicessahariens.presentation.ProduitGUI;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.List;
 
 public class Main {
 
-    private static final Logger logger = Logger.getLogger(Main.class);
+    private final static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
+
+        Locale locale = new Locale("fr");
+        // Charger les fichiers properties
+        ResourceBundle bundle = ResourceBundle.getBundle("i18n.messages", locale);
+
+        // Utiliser les messages traduits
+        String message = bundle.getString("bonjour");
+        System.out.println(message);
+
         try {
             // Initialiser de Log4j
             PropertyConfigurator.configure("./config/log4j.properties");
 
-            // Créer d'un produit
+            ServiceProduitDAO produitDAO = new ServiceProduitDAO();
+
             Produit produit1 = new Produit(
                     1,
                     "Dattes Deglet Nour",
@@ -42,14 +53,14 @@ public class Main {
                     75
             );
 
-            // Ajouter un produit à la base de données
-            ServiceProduitDAO.addProduit(produit1);
-            ServiceProduitDAO.addProduit(produit2);
-            ServiceProduitDAO.addProduit(produit3);
+            // Ajouter les produits
+            produitDAO.addProduit(produit1);
+            produitDAO.addProduit(produit2);
+            produitDAO.addProduit(produit3);
             logger.info("Produit ajouté avec succès !");
 
             // afficher la liste de produits
-            List<Produit> produits = ServiceProduitDAO.getAllProduits();
+            List<Produit> produits = produitDAO.getAllProduits();
             logger.info("Liste des produits en base :");
             for (Produit p : produits) {
                 System.out.println(p.getIdProduit() + " - " + p.getNom() + " - " + p.getPrix() + " DT");

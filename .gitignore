@@ -57,3 +57,4 @@ bin/
 
 .gitignore
 .projetPersoDelicesSahariens.iml
+config/db.properties
